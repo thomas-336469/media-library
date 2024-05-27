@@ -21,34 +21,30 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'name' => 'required',
+            'description' => 'required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            foreach ($request->file('image') as $image) {
-                $imageName = $image->getClientOriginalName();
-                $image->storeAs('images', $imageName, 'public');
-                // Save product details to database
-                Product::create([
-                    'name' => $request->name,
-                    'description' => $request->description,
-                    'image' => 'storage/images/' . $imageName
-                ]);
-            }
-        }
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $imageName);
 
-        return redirect()->route('products.create')->with('success', 'Product(s) uploaded successfully!');
+        $product = new Product();
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->image = 'images/' . $imageName;
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Product created successfully.');
     }
-
     public function destroy(Product $product)
     {
+        // Verwijder het afbeeldingbestand van de server
         if (file_exists(public_path($product->image))) {
             unlink(public_path($product->image));
         }
 
+        // Verwijder het product uit de database
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');

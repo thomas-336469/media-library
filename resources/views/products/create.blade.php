@@ -40,8 +40,8 @@
                 <div class="mb-6">
                     <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Image:</label>
                     <div class="flex items-center justify-between border border-gray-400 rounded px-3 py-2">
-                        <input type="file" name="image[]" id="image" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" multiple>
-                        <span class="text-sm text-gray-600">Choose multiple files</span>
+                        <input type="file" name="image" id="image" class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none">
+                        <span class="text-sm text-gray-600">Choose a file</span>
                     </div>
                 </div>
                 <div class="flex items-center justify-between">
